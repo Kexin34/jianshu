@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
+import  { actionCreators } from './store';
 
 import {
     HeaderWrapper,
@@ -13,6 +14,7 @@ import {
     SearchWrapper
 } from './style'
 
+// UI组件
 const Header = (props) => {
     return (
         <HeaderWrapper>
@@ -52,25 +54,20 @@ const Header = (props) => {
     );
 }
 
+// 容器组件，具体都放在sotre/reducer里面
 const mapStateToProps = (state) => {
     return {
-        focused: state.header.focused
+        focused: state.getIn(['header', 'focused'])
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         handleInputFocus(){
-            const action = {
-                type: 'search_focus'
-            };
-            dispatch(action);
+            dispatch(actionCreators.searchFocus());
         },
         handleInputBlur() {
-            const action = {
-                type: 'search_blur'
-            };
-            dispatch(action);
+            dispatch(actionCreators.searchBlur());
         }
     }
 }
