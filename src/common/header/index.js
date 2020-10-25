@@ -101,7 +101,6 @@ class Header extends Component {
     }
 }
 
-
 // 容器组件，具体都放在sotre/reducer里面
 const mapStateToProps = (state) => {
     return {
