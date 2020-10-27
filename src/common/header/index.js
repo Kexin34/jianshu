@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import  { actionCreators } from './store';
-
+import { actionCreators as loginActionCreators } from '../../pages/login/store'
 import {
     HeaderWrapper,
     Logo,
@@ -61,7 +61,7 @@ class Header extends Component {
     }
 
     render() {
-        const { focused, handleInputFocus,handleInputBlur, list } = this.props;
+        const { focused, handleInputFocus,handleInputBlur, list, login, logout } = this.props;
         return (
             <HeaderWrapper>
                 <Link to='/'>
@@ -70,7 +70,12 @@ class Header extends Component {
                 <Nav>
                     <NavItem className='left active'>首页</NavItem>
                     <NavItem className='left'>下载App</NavItem>
-                    <NavItem className='right'>登陆</NavItem>
+                    {
+                        login ? 
+                        <NavItem onClick={logout} className='right'>退出</NavItem> :  
+                        <Link to='/login'><NavItem className='right'>登陆</NavItem></Link>
+                    }
+                    
                     <NavItem className='right'>
                         <i className="iconfont spin">&#xe636;</i>
                     </NavItem>
@@ -93,10 +98,12 @@ class Header extends Component {
                     </SearchWrapper>
                 </Nav>
                 <Addition>
-                    <Button className='writting'>
-                    <i className="iconfont">&#xe631;</i>
-                        写文章
-                    </Button>
+                    <Link to='/write'>
+                        <Button className='writting'>
+                        <i className="iconfont">&#xe631;</i>
+                            写文章
+                        </Button>
+                    </Link>
                     <Button className='reg'>注册</Button>
                 </Addition>
             </HeaderWrapper>
@@ -105,14 +112,15 @@ class Header extends Component {
 }
 
 
-// 容器组件，具体都放在sotre/reducer里面
+// 容器组件，具体都放在store/reducer里面
 const mapStateToProps = (state) => {
     return {
         focused: state.getIn(['header', 'focused']),
         list: state.getIn(['header', 'list']),
         page: state.getIn(['header', 'page']),
         totalPage: state.getIn(['header', 'totalPage']),
-        mouseIn: state.getIn(['header', 'mouseIn'])
+        mouseIn: state.getIn(['header', 'mouseIn']),
+        login: state.getIn(['login', 'login'])
     }
 }
 
@@ -148,7 +156,10 @@ const mapDispatchToProps = (dispatch) => {
             }else {
                 dispatch(actionCreators.changePage(1));
             }
-        }
+        }, 
+        logout() {
+			dispatch(loginActionCreators.logout())
+		}
     }
 }
 
